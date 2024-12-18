@@ -1,23 +1,10 @@
-import React, { useState } from "react"
+import React, { useState } from "react";
 import { TextField, Modal, Box, Button } from "@mui/material"
 import { IInventory } from "../redux/models/inventory";
 import CloseIcon from '@mui/icons-material/Close';
-
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 500,
-  bgcolor: '#282c34',
-  border: '1px solid #000',
-  boxShadow: 24,
-  borderRadius: '12px',
-  color: '#fff',
-  py: 2,
-  px: 4
-};
-
+import { fields } from "../helpers";
+import * as styles from '../helpers/styles'
+import '../css/edit-modal.css'
 
 type ModalProps = {
     title: string,
@@ -29,12 +16,7 @@ type ModalProps = {
 
 const EditModal: React.FC<ModalProps> = ({ title, handleClose, open, handleSave, item }) => {
   const [ localItem, setLocalItem ] = useState<IInventory>(item)
-  const fields = [
-    { name: 'category', placeholder: 'phone' },
-    { name: 'price', placeholder: '50' },
-    { name: 'quantity', placeholder: '0' },
-    { name: 'value', placeholder: '0' }
-  ]
+
 
   const handleChange = (fieldName: string, value: any) => [
       setLocalItem(localItem => ({ ...localItem, [fieldName]: value }))
@@ -46,25 +28,24 @@ const EditModal: React.FC<ModalProps> = ({ title, handleClose, open, handleSave,
     aria-labelledby="modal-modal-title"
     aria-describedby="modal-modal-description"
   >
-    <Box sx={style}>
-    <CloseIcon style={{ color: 'yellowgreen', fontSize: '30px', float: 'right' }} onClick={() => handleClose()} />
-
-      <div style={{ color: '#fff', fontSize: '30px', fontFamily: 'sans-serif', marginTop: '16px' }}>
+    <Box sx={styles.modalStyles}>
+      <CloseIcon onClick={() => handleClose()} style={{ color: '#9ACD32', fontSize: '30px', float: 'right', cursor: 'pointer' }}/>
+      <div className="edit-title">
         <span>Edit product</span>
       </div>
-      <div style={{ color: '#fff', fontSize: '15px', marginTop: '6px', fontFamily: 'sans-serif' }}>
+      <div className="edit-description">
         {title}
       </div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: '20px', marginTop: '30px' }}>
+      <div className="edit-container">
       {
         fields.map((field, idx) => {
           return <div>
-            <div style={{ textTransform: 'capitalize', fontSize: '12px'}}>{field.name}</div>
+            <div className="edit-label">{field.name}</div>
             <TextField
-              style={{ color: "#fff", height: '30px', marginBottom: '30px', marginTop: '8px', borderRadius: '12px' }}
+              style={{ marginTop: '12px' }}
               variant="outlined"
-              margin="normal"
               name={field.name}
+              size="small"
               value={localItem[field.name as ('category' | 'price' | 'value' | 'name')]}
               type={idx === 0 ? "text" : "number"}
               placeholder={localItem[field.name as ('category' | 'price' | 'value' | 'name')] || field.placeholder}
@@ -74,9 +55,9 @@ const EditModal: React.FC<ModalProps> = ({ title, handleClose, open, handleSave,
         })
       }
       </div>
-      <div style={{ float: 'right', marginTop: '20px' }}>
-        <Button onClick={() => handleClose()} style={{ color: 'yellowgreen' }}>Cancel</Button>
-        <Button onClick={() => handleSave(localItem)}>Save</Button>
+      <div className="edit-action-btn">
+        <Button onClick={() => handleClose()} style={{ color: '#9ACD32', textTransform: 'capitalize' }}>Cancel</Button>
+        <Button onClick={() => handleSave(localItem)} style={{ textTransform: 'capitalize' }}>Save</Button>
       </div>
     </Box>
   </Modal>

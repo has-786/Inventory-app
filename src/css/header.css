@@ -1,0 +1,18 @@
+
+.header {
+    padding: 6px 0;
+}
+
+.toggle-text {
+    color: #fff;
+    font-size: 14px;
+    padding-top: 2px;
+}
+
+.toggle {
+    display: flex;
+    justify-content: space-between;
+    gap: 4px;
+    padding: 0 20px;
+}
+  

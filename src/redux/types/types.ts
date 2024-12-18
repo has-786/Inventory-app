@@ -54,3 +54,7 @@ export type InventoryActions =
   | FetchInventoryFailure
   | UpdateInventory
   | RemoveInventory;
+
+export type DispatchType = {
+  type: string
+}

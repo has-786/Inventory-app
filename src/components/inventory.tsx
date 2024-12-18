@@ -1,32 +1,33 @@
 import React, { useEffect, useState } from "react"
 import { IInventory } from "../redux/models/inventory"
 import Card from "./card"
+import Header from "./header";
 import EditIcon from '@mui/icons-material/Edit';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import DeleteIcon from '@mui/icons-material/Delete';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import ToggleOffIcon from '@mui/icons-material/ToggleOff';
-import ToggleOnIcon from '@mui/icons-material/ToggleOn';
 
-import '../App.css'
 import EditModal from "./editModal";
+import { getCardItems, headings } from "../helpers";
+import * as styles from '../helpers/styles'
+import '../css/inventory.css'
+import { CircularProgress } from "@mui/material";
 
 type InventoryProps = {
+    isRequesting: boolean,
     inventoryItems: IInventory[],
     fetchInventory: () => any,
     updateInventory: (item: IInventory, idx: number) => any,
     removeInventory: (idx: number) => any,
 }
 
-const Inventory: React.FC<InventoryProps> = ({ inventoryItems, fetchInventory, updateInventory, removeInventory }) => {
-    console.log('inventoryItems', inventoryItems)
+const Inventory: React.FC<InventoryProps> = ({ isRequesting, inventoryItems, fetchInventory, updateInventory, removeInventory }) => {
     const [ openEditModal, setOpenEditModal ] = useState(false)
     const [ editItemIdx, setEditItemIdx ] = useState(-1)
     const [ isAdmin, setAdmin ] = useState(true)
-    const totalProduct = inventoryItems.length,
-    outOfStock = inventoryItems.filter(i => i.quantity === 0).length,
-    totalStoreValue = 2, //inventoryItems.reduce((a, b) => a.value + b.value, 0),
-    numCategory = [ ...new Set(inventoryItems.map(i => i.category)) ].length
+
+    const { totalProduct, totalStoreValue, outOfStock, numCategory } = getCardItems(inventoryItems)
+    
     useEffect(() => {
         fetchInventory()
     }, [])
@@ -35,25 +36,18 @@ const Inventory: React.FC<InventoryProps> = ({ inventoryItems, fetchInventory, u
         setOpenEditModal(true)
         setEditItemIdx(idx)
     }
-    const hideClicked = (idx: number) => {
-        console.log('hide', idx)
 
+    const hideClicked = (idx: number) => {
         const item = inventoryItems[idx]
         updateInventory({ ...item, disabled: !item.disabled }, idx)
-        // write logic to update the item in redux
     }
-    const removeClicked = (idx: number) => {
-        console.log('remove', idx)
 
+    const removeClicked = (idx: number) => {
         removeInventory(idx)
-        // write logic to remove the item in redux
     }
 
     const performEdit = (item: IInventory) => {
-        console.log('will dispatch some action to update', item, editItemIdx)
-        // write logic to update the item in redux
         updateInventory(item, editItemIdx)
-
         setOpenEditModal(false)
         setEditItemIdx(-1)
     }
@@ -65,47 +59,27 @@ const Inventory: React.FC<InventoryProps> = ({ inventoryItems, fetchInventory, u
         { title: 'No of category', value: numCategory }
     ]
 
-    return (<div className="main">
-        <div className="header">
-            <div style={{ float: 'right', display: 'flex', justifyContent: 'space-between', gap: '4px', }}>
-                <div>admin</div>
-                {isAdmin && <ToggleOffIcon onClick={() => setAdmin(isAdmin => !isAdmin)} style={{ color: 'grey', fontSize: '40px', marginTop: '-7px' }}/>}
-                {!isAdmin && <ToggleOnIcon onClick={() => setAdmin(isAdmin => !isAdmin)} style={{ color: 'yellowgreen' , fontSize: '40px', marginTop: '-7px' }}/>}
-                <div>user</div>
-            </div>
-        </div>
+    const toggleAdmin = () => setAdmin((isAdmin: boolean) => !isAdmin)
+
+    return (<div className="section">
+    <Header toggleAdmin={toggleAdmin} isAdmin={isAdmin} />
+    <div className="main">
         <div className="app-title">Inventory stats</div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', margin: '16px 0' }}>
-        {
-            cardItems.map((item, idx) => {
-                return <Card title={item.title} value={item.value} idx={idx} />
-            })
-        }
+        <div className="cards">
+            {cardItems.map((item, idx) => <Card title={item.title} value={item.value} idx={idx} />)}
         </div>
         <div className="container">
             <div className="row">
-                    <div className="item">
-                        <div className="item-headers-text">Name</div>
-                    </div>
-                    <div className="item">
-                        <div className="item-headers-text">Category</div>
-                    </div>
-                    <div className="item">
-                        <div className="item-headers-text">Price</div>
-                    </div>
-                    <div className="item">
-                        <div className="item-headers-text">Quantity</div>
-                    </div>
-                    <div className="item">
-                        <div className="item-headers-text">Value</div>
-                    </div>
-                    <div className="item">
-                        <div className="item-headers-text" >ACTION</div>
-                    </div>
-                </div>
-        {
-            inventoryItems.map((item: IInventory, idx: number) => {
-                return <div className="row" style={{ opacity: item.disabled ? 0.5 : 1 }}>
+                {headings.map(item => <div className="item">
+                        <div className="item-headers-text">{item}</div>
+                    </div>)
+                }
+            </div>
+            { !!isRequesting && !inventoryItems?.length && <div className="loader">
+                <CircularProgress size="25px" />
+            </div>}
+            {!!inventoryItems?.length && inventoryItems.map((item: IInventory, idx: number) => {
+                return <div className={["row", item.disabled ? "haze" : ''].join(' ')}>
                     <div className="item">
                         <div className="item-text">{item.name}</div>
                     </div>
@@ -113,21 +87,21 @@ const Inventory: React.FC<InventoryProps> = ({ inventoryItems, fetchInventory, u
                         <div className="item-text">{item.category}</div>
                     </div>
                     <div className="item">
-                        <div className="item-text">{item.price}</div>
+                        <div className="item-text">${item.price}</div>
                     </div>
                     <div className="item">
                         <div className="item-text">{item.quantity}</div>
                     </div>
                     <div className="item">
-                        <div className="item-text">{item.value}</div>
+                        <div className="item-text">${item.value}</div>
                     </div>
-                    <div className="item" style={{ pointerEvents: !isAdmin ? 'none' : 'all' }}>
+                    <div className={["item", !isAdmin ? 'disabled' : '' ].join(' ')}>
                         <div className="item-text">
-                            <div style={{ display: 'flex', justifyContent: 'space-between', color: '#fff', gap: '8px', marginLeft: '-3px'}} >
-                                <EditIcon style={{fontSize: '15px'}} onClick={() => editClicked(idx)} />
-                                {!item.disabled && <VisibilityIcon style={{fontSize: '15px'}} onClick={() => hideClicked(idx)} />}
-                                {!!item.disabled && <VisibilityOffIcon style={{fontSize: '15px'}} onClick={() => hideClicked(idx)} />}
-                                <DeleteIcon style={{fontSize: '15px'}} onClick={() => removeClicked(idx)} />
+                            <div className="actions">
+                                <EditIcon style={styles.editIconStyles(isAdmin)} onClick={() => editClicked(idx)} />
+                                {!item.disabled && <VisibilityIcon style={styles.viewIconStyles(isAdmin)} onClick={() => hideClicked(idx)} />}
+                                {!!item.disabled && <VisibilityOffIcon style={styles.viewIconStyles(isAdmin)} onClick={() => hideClicked(idx)} />}
+                                <DeleteIcon style={styles.removeIconStyles(isAdmin)} onClick={() => removeClicked(idx)} />
                             </div>
                         </div>
                     </div>
@@ -142,6 +116,7 @@ const Inventory: React.FC<InventoryProps> = ({ inventoryItems, fetchInventory, u
             title={inventoryItems[editItemIdx].name}
         />}
         </div>
+    </div>
     </div>)
 }
 

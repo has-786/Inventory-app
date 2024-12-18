@@ -1,6 +1,6 @@
 import axios from "axios";
 import { all, call, put, takeLatest } from "redux-saga/effects";
-import { IInventory, Response } from "../../models/inventory";
+import { Response } from "../../models/inventory";
 import {
   fetchInventoryFailure,
   fetchInventorySuccess
@@ -8,21 +8,13 @@ import {
 import { inventoryTypes } from "../../actionTypes/inventoryTypes";
 import { url } from "../../../helpers/url";
 
-const getInventory = () => axios.get<Response>(url);
-
 function* fetchInventorySaga() {
   try {
-    //const response: Response = yield call(getInventory);
-    const inventoryDummyresponseData: Response = {
-      data: [{ category: 'Electronics', 
-      name: 'Bluetooth',
-      price: '100$',
-      quantity: 5,
-      value: '200' }]
-    }
+    const response: Response = yield call(() => axios.get<Response>(url))
+
     yield put(
       fetchInventorySuccess({
-        inventory: inventoryDummyresponseData.data
+        inventory: response.data
       })
     );
   } catch (e: any) {

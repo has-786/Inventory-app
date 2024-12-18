@@ -1,7 +1,5 @@
-import { legacy_createStore as createStore, applyMiddleware } from "redux";
 import createSagaMiddleware from "redux-saga";
-// import logger from "redux-logger";
-import rootReducer, { RootState } from "./reducers/rootReducer";
+import rootReducer from "./reducers/rootReducer";
 import { rootSaga } from "./sagas/rootSaga";
 import { configureStore, Tuple } from '@reduxjs/toolkit';
 

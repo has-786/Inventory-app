@@ -1,0 +1,22 @@
+.card-container { 
+    display: flex;
+    color: #fff; 
+    background: #06402B;
+    padding: 12px;
+    width: 100%;
+    border-radius: 12px;
+}
+
+.card-data {
+    padding-top: 10px;
+}
+
+.card-title {
+    font-size: 12px;
+    margin-top: 10px;
+}
+
+.card-value {
+    font-size: 40px;
+    margin-top: 0px;
+}
