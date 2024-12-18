@@ -24,7 +24,7 @@
     display: flex;
     justify-content: space-between;
     color: #fff;
-    border-bottom: 1px solid #36454F;
+    border-bottom: 1px solid #36454F;    
     padding: 10px;
     height: 30px;
     align-items: center;
@@ -34,31 +34,22 @@
     opacity: 0.5;
   }
   
-  .header {
-    width: 100%;
-    margin-top: 0;
-    height: 30px;
-    display: flex;
-    justify-content: end;
-    border-bottom: 1px solid #282c34;
-  }
-  
   .container {
-    background: #282c34;
+    background-color: #191919;
     border: 1px solid #000;
     border-radius: 12px;
     margin-top: 40px;
     padding: 0 20px;
   }
-  
+
   .main {
     background: #000;
     height: 100%;
-    padding: 6px;
+    padding: 20px;
   }
   
   .app-title {
-    padding: 20px 0 20px 10px;
+    padding: 0px 0 12px 10px;
     color: #FFF;
     font-size: 35px;
     font-family: Verdana, Geneva, Tahoma, sans-serif;

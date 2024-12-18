@@ -9,7 +9,7 @@ type headerProps = {
     toggleAdmin: () => any
 }
 
-const Header : React.FC<headerProps> = ({ isAdmin, toggleAdmin }) => {
+const Header : React.FC<headerProps> = ({ isAdmin, toggleAdmin }: headerProps) => {
     return <div className="header">
             <div className="toggle">
                 <div className="toggle-text">admin</div>

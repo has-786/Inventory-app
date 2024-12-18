@@ -17,6 +17,7 @@
 .edit-label {
     color: #F5F5DC	;
     font-size: 12px;
+    padding-left: 6px;
     font-family: sans-serif;
     text-transform: capitalize;
 }

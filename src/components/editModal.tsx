@@ -14,24 +14,26 @@ type ModalProps = {
     item: IInventory
 }
 
-const EditModal: React.FC<ModalProps> = ({ title, handleClose, open, handleSave, item }) => {
+const EditModal: React.FC<ModalProps> = ({ title, handleClose, open, handleSave, item } : ModalProps) => {
   const [ localItem, setLocalItem ] = useState<IInventory>(item)
 
-
   const handleChange = (fieldName: string, value: any) => [
-      setLocalItem(localItem => ({ ...localItem, [fieldName]: value }))
+      setLocalItem((localItem: IInventory) => ({ ...localItem, [fieldName]: value }))
   ]
 
-    return <Modal
+  return <Modal
     open={open}
     onClose={handleClose}
     aria-labelledby="modal-modal-title"
     aria-describedby="modal-modal-description"
   >
     <Box sx={styles.modalStyles}>
-      <CloseIcon onClick={() => handleClose()} style={{ color: '#9ACD32', fontSize: '30px', float: 'right', cursor: 'pointer' }}/>
+      <CloseIcon
+        onClick={() => handleClose()}
+        style={{ color: '#9ACD32', fontSize: '30px', float: 'right', cursor: 'pointer' }}
+      />
       <div className="edit-title">
-        <span>Edit product</span>
+        Edit product
       </div>
       <div className="edit-description">
         {title}
@@ -42,10 +44,16 @@ const EditModal: React.FC<ModalProps> = ({ title, handleClose, open, handleSave,
           return <div>
             <div className="edit-label">{field.name}</div>
             <TextField
-              style={{ marginTop: '12px' }}
-              variant="outlined"
+              variant="standard"
               name={field.name}
               size="small"
+              style={{ marginTop: '12px' }}
+              inputProps={{
+                style: styles.textInputStyles().textField
+              }}
+              InputProps={{
+                disableUnderline: true
+              }}
               value={localItem[field.name as ('category' | 'price' | 'value' | 'name')]}
               type={idx === 0 ? "text" : "number"}
               placeholder={localItem[field.name as ('category' | 'price' | 'value' | 'name')] || field.placeholder}
@@ -56,8 +64,17 @@ const EditModal: React.FC<ModalProps> = ({ title, handleClose, open, handleSave,
       }
       </div>
       <div className="edit-action-btn">
-        <Button onClick={() => handleClose()} style={{ color: '#9ACD32', textTransform: 'capitalize' }}>Cancel</Button>
-        <Button onClick={() => handleSave(localItem)} style={{ textTransform: 'capitalize' }}>Save</Button>
+        <Button
+          onClick={() => handleClose()}
+          style={{ color: '#9ACD32', textTransform: 'capitalize' }}>
+          Cancel
+        </Button>
+        <Button
+          onClick={() => handleSave(localItem)}
+          style={{ textTransform: 'capitalize' }}
+        >
+            Save
+        </Button>
       </div>
     </Box>
   </Modal>

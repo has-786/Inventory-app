@@ -21,7 +21,7 @@ type InventoryProps = {
     removeInventory: (idx: number) => any,
 }
 
-const Inventory: React.FC<InventoryProps> = ({ isRequesting, inventoryItems, fetchInventory, updateInventory, removeInventory }) => {
+const Inventory: React.FC<InventoryProps> = ({ isRequesting, inventoryItems, fetchInventory, updateInventory, removeInventory }: InventoryProps) => {
     const [ openEditModal, setOpenEditModal ] = useState(false)
     const [ editItemIdx, setEditItemIdx ] = useState(-1)
     const [ isAdmin, setAdmin ] = useState(true)
@@ -98,10 +98,22 @@ const Inventory: React.FC<InventoryProps> = ({ isRequesting, inventoryItems, fet
                     <div className={["item", !isAdmin ? 'disabled' : '' ].join(' ')}>
                         <div className="item-text">
                             <div className="actions">
-                                <EditIcon style={styles.editIconStyles(isAdmin)} onClick={() => editClicked(idx)} />
-                                {!item.disabled && <VisibilityIcon style={styles.viewIconStyles(isAdmin)} onClick={() => hideClicked(idx)} />}
-                                {!!item.disabled && <VisibilityOffIcon style={styles.viewIconStyles(isAdmin)} onClick={() => hideClicked(idx)} />}
-                                <DeleteIcon style={styles.removeIconStyles(isAdmin)} onClick={() => removeClicked(idx)} />
+                                <EditIcon
+                                    style={styles.editIconStyles(isAdmin)}
+                                    onClick={() => editClicked(idx)}
+                                />
+                                {!item.disabled && <VisibilityIcon 
+                                    style={styles.viewIconStyles(isAdmin)}
+                                    onClick={() => hideClicked(idx)}
+                                />}
+                                {!!item.disabled && <VisibilityOffIcon
+                                    style={styles.viewIconStyles(isAdmin)}
+                                    onClick={() => hideClicked(idx)}
+                                />}
+                                <DeleteIcon
+                                    style={styles.removeIconStyles(isAdmin)}
+                                    onClick={() => removeClicked(idx)}
+                                />
                             </div>
                         </div>
                     </div>

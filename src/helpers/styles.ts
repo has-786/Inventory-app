@@ -17,19 +17,32 @@ const editIconStyles = (isAdmin: boolean) => ({ ...actionIconStyles, color: !isA
 const viewIconStyles = (isAdmin: boolean) => ({ ...actionIconStyles, color: !isAdmin ? '#808080' : '#ADD8E6' })
 const removeIconStyles = (isAdmin: boolean) => ({ ...actionIconStyles, color: !isAdmin ? '#808080' : '#ff3232' })
 
+const textInputStyles = () => ({
+    textField: {
+        color: '#E9DCC9',
+        fontWeight: 100,
+        fontFamily: 'sans-serif',
+        fontSize: '14px',
+        backgroundColor: '#323232',
+        padding: '12px',
+        width: '180px',
+        border: '1px solid #808080',
+        borderRadius: '20px'
+    }
+})
+
 const modalStyles = {
   position: 'absolute',
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 500,
-  bgcolor: '#323232',
+  width: 450,
+  bgcolor: '#191919',
   border: '1px solid #000',
   boxShadow: 24,
-  borderRadius: '12px',
+  borderRadius: '9px',
   color: '#fff',
-  py: 2,
-  px: 4
+  p: 2
 }
 
 const iconStyles = { height: '30px', width: '30px', color: '#fff' }
@@ -51,5 +64,6 @@ export {
     iconStyles,
     closeIconStyles,
     modalCloseBtnStyles,
-    modalSaveBtnStyles
+    modalSaveBtnStyles,
+    textInputStyles
 }
